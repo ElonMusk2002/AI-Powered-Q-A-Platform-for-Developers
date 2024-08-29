@@ -1,0 +1,45 @@
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--primary-color);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 1rem 0;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+
+  nav ul li {
+    margin: 0.5rem 1rem;
+  }
+
+  .user-profile {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .user-avatar {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+
+  .user-stats {
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    flex-basis: 50%;
+    margin-bottom: 1rem;
+  }
+}

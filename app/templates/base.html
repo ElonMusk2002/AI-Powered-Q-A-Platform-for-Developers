@@ -1,0 +1,121 @@
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Dev Q&A Platform{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/components/_buttons.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/components/_forms.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/components/_navigation.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/components/_tags.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/components/_typography.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/components/_utilities.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/layout/_footer.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/layout/_header.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/layout/_main.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/utilities/_animations.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/utilities/_breakpoints.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('main.index') }}">Home</a></li>
+          {% if current_user.is_authenticated %}
+          <li>
+            <a href="{{ url_for('questions.ask_question') }}">Ask Question</a>
+          </li>
+          <li>
+            <a
+              href="{{ url_for('main.user_profile', username=current_user.username) }}"
+              >Profile</a
+            >
+          </li>
+          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+          {% else %}
+          <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+          <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+      <form
+        action="{{ url_for('main.search') }}"
+        method="get"
+        class="search-form"
+      >
+        <input type="text" name="q" placeholder="Search questions..." />
+        <button type="submit">Search</button>
+      </form>
+    </header>
+
+    <main class="container">
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="flashes">
+        {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-nav">
+          <ul>
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <p>&copy; 2024 Dev Q&A Platform. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>

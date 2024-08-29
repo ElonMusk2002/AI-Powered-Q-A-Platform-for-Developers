@@ -1,0 +1,48 @@
+<!-- index.html -->
+
+{% extends "base.html" %} {% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>Find Solutions, Share Expertise</h1>
+    <p>
+      Connect with fellow developers, get answers, and level up your coding
+      skills.
+    </p>
+    <a href="{{ url_for('questions.ask_question') }}" class="btn"
+      >Ask a Question</a
+    >
+  </div>
+</section>
+
+<div class="container">
+  <h1>Latest Questions</h1>
+  <div class="question-list">
+    {% for question in questions %}
+    <div class="question-summary">
+      <h2>
+        <a
+          href="{{ url_for('questions.question_detail', question_id=question.id) }}"
+        >
+          {{ question.title }}
+        </a>
+      </h2>
+      <p>
+        {{ question.body[:200] }}{% if question.body|length > 200 %}...{% endif
+        %}
+      </p>
+      <div class="question-meta">
+        <span>Asked by {{ question.user.username }}</span>
+        <span>{{ question.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+        <span>{{ question.views }} views</span>
+        <span>{{ question.votes }} votes</span>
+      </div>
+      <div class="question-tags">
+        {% for tag in question.tags %}
+        <span class="tag">{{ tag.name }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

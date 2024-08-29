@@ -1,0 +1,33 @@
+<!-- search_results.html -->
+
+{% extends "base.html" %} {% block content %}
+<h1>Search Results for "{{ query }}"</h1>
+<div class="search-results">
+  {% if questions %} {% for question in questions %}
+  <div class="question-summary">
+    <h2>
+      <a
+        href="{{ url_for('questions.question_detail', question_id=question.id) }}"
+        >{{ question.title }}</a
+      >
+    </h2>
+    <p>
+      {{ question.body[:200] }}{% if question.body|length > 200 %}...{% endif %}
+    </p>
+    <div class="question-meta">
+      <span>Asked by {{ question.user.username }}</span>
+      <span>{{ question.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+      <span>{{ question.views }} views</span>
+      <span>{{ question.votes }} votes</span>
+    </div>
+    <div class="question-tags">
+      {% for tag in question.tags %}
+      <span class="tag">{{ tag.name }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %} {% else %}
+  <p>No results found for "{{ query }}".</p>
+  {% endif %}
+</div>
+{% endblock %}

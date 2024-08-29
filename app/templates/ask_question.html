@@ -1,0 +1,51 @@
+<!-- ask_question.html -->
+
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <div class="form-container">
+    <h1>Ask a Question</h1>
+    <form method="POST" action="{{ url_for('questions.ask_question') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          placeholder="What's your question?"
+          required
+        />
+      </div>
+    
+      <div class="form-group">
+        <label for="body">Body</label>
+        <textarea
+          class="form-control"
+          id="body"
+          name="body"
+          placeholder="Provide details about your question..."
+          rows="6"
+          required
+        ></textarea>
+      </div>
+    
+      <div class="form-group">
+        <label for="tags">Tags (comma-separated)</label>
+        <input
+          type="text"
+          class="form-control"
+          id="tags"
+          name="tags"
+          placeholder="e.g., Python, Flask, Database"
+        />
+        <small class="hint"
+          >Use relevant tags or leave empty for AI-suggested tags.</small
+        >
+      </div>
+    
+      <button type="submit" class="btn btn-primary">Submit Question</button>
+    </form>    
+  </div>
+</div>
+{% endblock %}

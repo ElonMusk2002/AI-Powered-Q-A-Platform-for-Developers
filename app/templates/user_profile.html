@@ -1,0 +1,69 @@
+<!-- user_profile.html -->
+
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <div class="profile-header">
+    <img
+      src="{{ url_for('static', filename='images/default-avatar.jpg') }}"
+      alt="{{ user.username }}'s Avatar"
+      class="avatar"
+    />
+    <div class="user-info">
+      <h1>{{ user.username }}</h1>
+      <p>Email: {{ user.email }}</p>
+      <p class="reputation">Reputation: {{ user.reputation }}</p>
+    </div>
+  </div>
+
+  <div class="user-questions">
+    <h2 class="section-title">Questions ({{ questions.items|length }})</h2>
+    {% if questions.items %} {% for question in questions.items %}
+    <div class="question-summary">
+      <h3>
+        <a
+          href="{{ url_for('questions.question_detail', question_id=question.id) }}"
+          >{{ question.title }}</a
+        >
+      </h3>
+      <p>
+        {{ question.body[:200] }}{% if question.body|length > 200 %}...{% endif
+        %}
+      </p>
+      <div class="question-meta">
+        <span>{{ question.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+        <span>{{ question.views }} views</span>
+        <span>{{ question.votes }} votes</span>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <p class="no-contributions">This user hasn't asked any questions yet.</p>
+    {% endif %}
+  </div>
+
+  <div class="user-answers">
+    <h2 class="section-title">Answers ({{ answers.items|length }})</h2>
+    {% if answers.items %} {% for answer in answers.items %}
+    <div class="answer-summary">
+      <h3>
+        <a
+          href="{{ url_for('questions.question_detail', question_id=answer.question.id) }}"
+          >{{ answer.question.title }}</a
+        >
+      </h3>
+      <p>
+        {{ answer.body[:200] }}{% if answer.body|length > 200 %}...{% endif %}
+      </p>
+      <div class="answer-meta">
+        <span>{{ answer.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+        <span>{{ answer.votes }} votes</span>
+        {% if answer.is_accepted %}
+        <span class="accepted">Accepted Answer</span>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <p class="no-contributions">This user hasn't posted any answers yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

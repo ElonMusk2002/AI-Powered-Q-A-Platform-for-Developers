@@ -1,0 +1,28 @@
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --text-color: #212529;
+  --card-background: #ffffff;
+  --border-color: #e1e1e1;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --hover-color: rgba(0, 123, 255, 0.1);
+  --transition: all 0.3s ease;
+  --container-width: 1400px;
+  --font-family: "Inter", sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}

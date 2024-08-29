@@ -1,0 +1,143 @@
+<!-- question_detail.html -->
+
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <div class="question-detail">
+    <div class="content-wrapper">
+      <div class="vote-buttons">
+        <form
+          action="{{ url_for('questions.vote_question', question_id=question.id) }}"
+          method="post"
+        >
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button type="submit" name="vote_type" value="up">+</button>
+        </form>
+        <span>{{ question.votes }}</span>
+        <form
+          action="{{ url_for('questions.vote_question', question_id=question.id) }}"
+          method="post"
+        >
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button type="submit" name="vote_type" value="down">-</button>
+        </form>
+      </div>
+
+      <div class="question-content">
+        <div class="question-header">
+          <h1>{{ question.title }}</h1>
+          <div class="question-meta">
+            <span>Asked by {{ question.user.username }}</span>
+            <span>{{ question.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+          </div>
+        </div>
+
+        <div class="question-body">{{ question.body }}</div>
+
+        <div class="question-tags">
+          {% for tag in question.tags %}
+          <span class="tag">{{ tag.name }}</span>
+          {% endfor %}
+        </div>
+
+        <form
+          action="{{ url_for('auth.report_question', question_id=question.id) }}"
+          method="post"
+        >
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button type="submit" class="btn btn-warning">Report Question</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="ai-insights">
+      <h2 class="section-title">AI Insights</h2>
+      <div class="insights-content">
+        {{ ai_insights|default('No AI insights available at the moment.', true)
+        }}
+      </div>
+    </div>
+
+    <div class="ai-summary">
+      <h2 class="section-title">AI-Generated Summary</h2>
+      <div class="summary-content">
+        {% if question.summary %} {{ question.summary }} {% else %} No
+        AI-generated summary available at the moment. {% endif %}
+      </div>
+    </div>
+
+    <div class="similar-questions">
+      <h2 class="section-title">Similar Questions</h2>
+      {% if similar_questions %}
+      <ul>
+        {% for similar_question in similar_questions %}
+        <li>
+          <a
+            href="{{ url_for('questions.question_detail', question_id=similar_question.id) }}"
+            >{{ similar_question.title }}</a
+          >
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No similar questions found.</p>
+      {% endif %}
+    </div>
+
+    <div class="answers">
+      <h2 class="section-title">{{ question.answers.count() }} Answers</h2>
+      {% for answer in ranked_answers %}
+      <div class="answer">
+        <div class="vote-buttons">
+          <form
+            action="{{ url_for('answers.vote_answer', answer_id=answer.id) }}"
+            method="post"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button type="submit" name="vote_type" value="up">+</button>
+          </form>
+          <span>{{ answer.votes }}</span>
+          <form
+            action="{{ url_for('answers.vote_answer', answer_id=answer.id) }}"
+            method="post"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button type="submit" name="vote_type" value="down">-</button>
+          </form>
+        </div>
+        <div class="answer-body">{{ answer.body }}</div>
+        <div class="answer-meta">
+          {% if current_user == question.author and not answer.is_accepted %}
+          <form
+            action="{{ url_for('answers.accept_answer', answer_id=answer.id) }}"
+            method="post"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button type="submit" class="btn btn-success">Accept Answer</button>
+          </form>
+          {% endif %} {% if answer.is_accepted %}
+          <span class="accepted">Accepted Answer</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="post-answer">
+      <h2 class="section-title">Your Answer</h2>
+      <form
+        action="{{ url_for('answers.post_answer', question_id=question.id) }}"
+        method="post"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <textarea
+          name="answer_body"
+          rows="6"
+          placeholder="Write your answer here..."
+          required
+        ></textarea>
+        <button type="submit" class="btn btn-primary">Post Your Answer</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
